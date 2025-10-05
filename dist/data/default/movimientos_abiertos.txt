@@ -1,0 +1,4 @@
+{"ficha": 32, "hora_entrada": "2025-10-04 07:48", "dni": null, "abonado_vigente_al_ingreso": false, "usuario": "Sistema"}
+{"ficha": 43, "hora_entrada": "2025-10-04 07:48", "dni": null, "abonado_vigente_al_ingreso": false, "usuario": "Sistema"}
+{"ficha": 44, "hora_entrada": "2025-10-04 07:48", "dni": null, "abonado_vigente_al_ingreso": false, "usuario": "Sistema"}
+{"ficha": 17, "hora_entrada": "2025-10-04 07:48", "dni": null, "abonado_vigente_al_ingreso": false, "usuario": "Sistema"}

@@ -1,0 +1,1 @@
+id;dni_persona;fecha_inicio;fecha_fin;precio;fecha_alta;activo

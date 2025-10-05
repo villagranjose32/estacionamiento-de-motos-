@@ -1,0 +1,6 @@
+{"ficha": 31, "entrada": "2025-10-03 17:04", "salida": "2025-10-03 17:08", "minutos": 4, "monto": 0.0, "motivo": "fraccion", "dni": null, "abonado": false, "usuario_cierre": "Sistema"}
+{"ficha": 43, "entrada": "2025-10-04 02:52", "salida": "2025-10-04 03:14", "minutos": 22, "monto": 500.0, "motivo": "fraccion", "dni": null, "abonado": false, "usuario_cierre": "Sistema"}
+{"ficha": 32, "entrada": "2025-10-04 03:14", "salida": "2025-10-04 03:14", "minutos": 0, "monto": 0.0, "motivo": "fraccion", "dni": null, "abonado": false, "usuario_cierre": "Sistema"}
+{"ficha": 54, "entrada": "2025-10-04 03:20", "salida": "2025-10-04 03:21", "minutos": 1, "monto": 0.0, "motivo": "fraccion", "dni": null, "abonado": false, "usuario_cierre": "Sistema"}
+{"ficha": 32, "entrada": "2025-10-04 03:18", "salida": "2025-10-04 22:14", "minutos": 1136, "monto": 0.0, "motivo": "abonado", "dni": "36885926", "abonado": true, "usuario_cierre": "Sistema"}
+{"ficha": 33, "entrada": "2025-10-04 03:22", "salida": "2025-10-04 22:19", "minutos": 1137, "monto": 0.0, "motivo": "abonado", "dni": "36885926", "abonado": true, "usuario_cierre": "Sistema"}

@@ -1,0 +1,1 @@
+id;abono_id;monto;medio_pago;comprobante;fecha_pago;observaciones

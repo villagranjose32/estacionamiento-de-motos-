@@ -1,0 +1,4 @@
+nombre;hora_inicio;hora_fin;precio;dias;activo
+Mañana;06:00;12:00;2500.00;L,M,X,J,V,S,D;1
+Tarde;12:00;18:00;2500.00;L,M,X,J,V,S,D;1
+Noche;18:00;06:00;3000.00;L,M,X,J,V,S,D;1

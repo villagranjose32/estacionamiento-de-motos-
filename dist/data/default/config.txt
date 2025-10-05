@@ -1,0 +1,18 @@
+# Configuración del Sistema de Estacionamiento
+# Archivo generado automáticamente
+
+nombre=Estacionamiento Centro
+capacidad=120
+gracia_min=10
+fraccion_min=30
+precio_por_fraccion=500.00
+aplica_tarifa_diaria=si
+umbral_diaria_horas=12
+tarifa_diaria=6000.00
+aplica_tarifa_por_turno=si
+redondeo_turno=entero
+exceso_turno=mas_barato
+regla_eleccion_monto=mas_barato
+prioridad_precio=turno>diaria>fraccion
+cubre_hasta_egreso_si_vencia_durante_estadia=si
+dias_alerta_vencimiento=7
