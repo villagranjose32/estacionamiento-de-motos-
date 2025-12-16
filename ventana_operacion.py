@@ -1,5 +1,7 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import messagebox
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 from datetime import datetime
 import sys
 import os
@@ -13,12 +15,98 @@ from domain.infra.services.egreso_service_nuevo import EgresoServiceNuevo
 from ventana_abonos import mostrar_gestion_abonos
 
 
+class BotonesRedondeados:
+    """Clase para crear botones con bordes redondeados"""
+    
+    def __init__(self, parent, texto, comando, estilo="success"):
+        self.parent = parent
+        self.texto = texto
+        self.comando = comando
+        self.estilo = estilo
+        self.pressed = False
+        
+        # Colores para cada estilo
+        self.colores = {
+            "success": {"bg": "#28a745", "hover": "#218838", "text": "white"},
+            "danger": {"bg": "#dc3545", "hover": "#c82333", "text": "white"},
+            "info": {"bg": "#17a2b8", "hover": "#138496", "text": "white"},
+            "warning": {"bg": "#ffc107", "hover": "#e0a800", "text": "black"},
+            "secondary": {"bg": "#6c757d", "hover": "#5a6268", "text": "white"}
+        }
+        
+        self.color_actual = self.colores.get(estilo, self.colores["success"])
+        
+        # Canvas para el botón
+        self.canvas = tk.Canvas(parent, width=160, height=40,
+                               bg="#1e1e1e", highlightthickness=0,
+                               relief=FLAT, bd=0)
+        self.canvas.pack(side=LEFT, padx=5)
+        
+        # Dibujar botón inicial
+        self.dibujar_boton(self.color_actual["bg"])
+        
+        # Eventos
+        self.canvas.bind("<Enter>", self.on_enter)
+        self.canvas.bind("<Leave>", self.on_leave)
+        self.canvas.bind("<Button-1>", self.on_click)
+        self.canvas.bind("<ButtonPress-1>", self.on_press)
+        self.canvas.bind("<ButtonRelease-1>", self.on_release)
+        self.canvas.config(cursor="hand2")
+    
+    def dibujar_boton(self, color_bg):
+        """Dibuja el botón con bordes redondeados"""
+        self.canvas.delete("all")
+        
+        # Dibujar rectángulo redondeado
+        self.canvas.create_oval(0, 0, 15, 15, fill=color_bg, outline="")  # Esquina superior izquierda
+        self.canvas.create_oval(145, 0, 160, 15, fill=color_bg, outline="")  # Esquina superior derecha
+        self.canvas.create_oval(0, 25, 15, 40, fill=color_bg, outline="")  # Esquina inferior izquierda
+        self.canvas.create_oval(145, 25, 160, 40, fill=color_bg, outline="")  # Esquina inferior derecha
+        
+        # Rectángulos del centro
+        self.canvas.create_rectangle(8, 0, 152, 40, fill=color_bg, outline="")
+        self.canvas.create_rectangle(0, 8, 160, 32, fill=color_bg, outline="")
+        
+        # Texto
+        self.canvas.create_text(80, 20, text=self.texto, 
+                               font=("Arial", 9, "bold"),
+                               fill=self.color_actual["text"], 
+                               justify="center")
+    
+    def on_enter(self, event):
+        """Efecto hover"""
+        if not self.pressed:
+            self.dibujar_boton(self.color_actual["hover"])
+    
+    def on_leave(self, event):
+        """Restaurar color normal"""
+        if not self.pressed:
+            self.dibujar_boton(self.color_actual["bg"])
+    
+    def on_press(self, event):
+        """Al presionar el botón"""
+        self.pressed = True
+        self.dibujar_boton(self.color_actual["hover"])
+    
+    def on_release(self, event):
+        """Al soltar el botón"""
+        self.pressed = False
+        self.dibujar_boton(self.color_actual["bg"])
+    
+    def on_click(self, event):
+        """Ejecutar comando"""
+        self.comando()
+    
+    def get_canvas(self):
+        """Retorna el canvas para empaquetarlo"""
+        return self.canvas
+
+
 class VentanaOperacion:
     def __init__(self, root):
         self.root = root
         self.root.title("Sistema de Estacionamiento - Operación")
-        self.root.geometry("1000x700")
-        self.root.configure(bg='white')
+        self.root.geometry("1200x750")
         
         # Configurar servicios
         # Usar SedePaths con ruta predeterminada (detectará automáticamente)
@@ -39,122 +127,138 @@ class VentanaOperacion:
         self.entry_ficha.focus_set()
     
     def crear_interfaz(self):
-        # Frame principal
-        main_frame = tk.Frame(self.root, bg='white', padx=20, pady=20)
-        main_frame.pack(fill=tk.BOTH, expand=True)
+        # Frame principal con padding
+        main_frame = ttk.Frame(self.root, padding=15)
+        main_frame.pack(fill=BOTH, expand=True)
         
-        # Título
-        titulo = tk.Label(main_frame, text="SISTEMA DE ESTACIONAMIENTO", 
-                         font=("Arial", 18, "bold"), bg='white')
+        # Título con estilo
+        titulo = ttk.Label(main_frame, text="🏍️ SISTEMA DE ESTACIONAMIENTO", 
+                          font=("Arial", 20, "bold"))
         titulo.pack(pady=(0, 20))
         
-        # Frame de operación
-        op_frame = tk.LabelFrame(main_frame, text="OPERACIÓN", font=("Arial", 12, "bold"))
-        op_frame.pack(fill=tk.X, pady=(0, 15))
+        # Frame de operación con LabelFrame
+        op_frame = ttk.Labelframe(main_frame, text="⚙️  OPERACIÓN", padding=15)
+        op_frame.pack(fill=X, pady=(0, 15))
         
-        # Campos de entrada
-        campos_frame = tk.Frame(op_frame)
-        campos_frame.pack(pady=15)
+        # Campos de entrada en grid
+        campos_frame = ttk.Frame(op_frame)
+        campos_frame.pack(fill=X, pady=(0, 15))
         
         # Nro de Ficha
-        tk.Label(campos_frame, text="Nro. Ficha:", font=("Arial", 14, "bold")).grid(row=0, column=0, padx=5)
-        self.entry_ficha = tk.Entry(campos_frame, textvariable=self.ficha_var, 
-                                   font=("Arial", 18, "bold"), width=12, justify='center')
+        ttk.Label(campos_frame, text="Nro. Ficha:", font=("Arial", 12, "bold")).grid(row=0, column=0, sticky=W, padx=5)
+        self.entry_ficha = ttk.Entry(campos_frame, textvariable=self.ficha_var, 
+                                     font=("Arial", 16, "bold"), width=10, justify='center')
         self.entry_ficha.grid(row=0, column=1, padx=10)
         
         # Estado Ficha
-        self.lbl_estado_ficha = tk.Label(campos_frame, text="", font=("Arial", 12))
+        self.lbl_estado_ficha = ttk.Label(campos_frame, text="", font=("Arial", 11))
         self.lbl_estado_ficha.grid(row=0, column=2, padx=5)
         
         # DNI
-        tk.Label(campos_frame, text="DNI:", font=("Arial", 14, "bold")).grid(row=0, column=3, padx=5)
-        self.entry_dni = tk.Entry(campos_frame, textvariable=self.dni_var, 
-                                 font=("Arial", 16, "bold"), width=15, justify='center')
+        ttk.Label(campos_frame, text="DNI:", font=("Arial", 12, "bold")).grid(row=0, column=3, padx=5)
+        self.entry_dni = ttk.Entry(campos_frame, textvariable=self.dni_var, 
+                                  font=("Arial", 14, "bold"), width=15, justify='center')
         self.entry_dni.grid(row=0, column=4, padx=10)
         
         # Estado DNI
-        self.lbl_estado_dni = tk.Label(campos_frame, text="Sin DNI", font=("Arial", 12, "bold"))
+        self.lbl_estado_dni = ttk.Label(campos_frame, text="Sin DNI", font=("Arial", 11))
         self.lbl_estado_dni.grid(row=0, column=5, padx=10)
         
         # Botón buscar DNI
-        self.btn_buscar = tk.Button(campos_frame, text="Buscar (Alt+B)", 
-                                  font=("Arial", 12, "bold"), bg='blue', fg='white',
-                                  command=self.buscar_persona, width=12)
+        self.btn_buscar = ttk.Button(campos_frame, text="🔍 Buscar (Alt+B)", 
+                                     command=self.buscar_persona)
         self.btn_buscar.grid(row=0, column=6, padx=10)
         
-        # Botones
-        botones_frame = tk.Frame(op_frame)
-        botones_frame.pack(pady=15)
+        # Frame de botones principales
+        botones_frame = ttk.Frame(op_frame)
+        botones_frame.pack(fill=X, pady=(0, 10))
         
-        self.btn_ingreso = tk.Button(botones_frame, text="INGRESO (Enter)", 
-                                    font=("Arial", 11, "bold"), bg='green', fg='white',
-                                    command=self.procesar_ingreso, width=15)
-        self.btn_ingreso.pack(side=tk.LEFT, padx=5)
+        self.btn_ingreso = BotonesRedondeados(botones_frame, "✅ INGRESO (Enter)", 
+                                             self.procesar_ingreso, "success")
         
-        self.btn_salida = tk.Button(botones_frame, text="SALIDA (F2)", 
-                                   font=("Arial", 11, "bold"), bg='red', fg='white',
-                                   command=self.procesar_salida, width=15)
-        self.btn_salida.pack(side=tk.LEFT, padx=5)
+        self.btn_salida = BotonesRedondeados(botones_frame, "❌ SALIDA (F2)", 
+                                            self.procesar_salida, "danger")
         
-        self.btn_validar = tk.Button(botones_frame, text="VALIDAR DNI (Alt+A)", 
-                                    font=("Arial", 11, "bold"), bg='blue', fg='white',
-                                    command=self.validar_dni, width=20)
-        self.btn_validar.pack(side=tk.LEFT, padx=5)
+        self.btn_validar = BotonesRedondeados(botones_frame, "✔ VALIDAR (Alt+A)", 
+                                             self.validar_dni, "info")
         
-        self.btn_gestionar_abono = tk.Button(botones_frame, text="GESTIÓN ABONOS (F3)", 
-                                            font=("Arial", 11, "bold"), bg='purple', fg='white',
-                                            command=self.gestionar_abonos, width=20)
-        self.btn_gestionar_abono.pack(side=tk.LEFT, padx=5)
+        self.btn_gestionar_abono = BotonesRedondeados(botones_frame, "💳 ABONOS (F3)", 
+                                                     self.gestionar_abonos, "warning")
         
-        self.btn_limpiar = tk.Button(botones_frame, text="LIMPIAR (Esc)", 
-                                    font=("Arial", 11, "bold"), bg='gray', fg='white',
-                                    command=self.limpiar_campos, width=15)
-        self.btn_limpiar.pack(side=tk.LEFT, padx=5)
+        self.btn_limpiar = BotonesRedondeados(botones_frame, "🗑️ LIMPIAR (Esc)", 
+                                             self.limpiar_campos, "secondary")
         
         # Frame de estado
-        estado_frame = tk.LabelFrame(main_frame, text="ESTADO", font=("Arial", 12, "bold"))
-        estado_frame.pack(fill=tk.X, pady=(0, 15))
+        estado_frame = ttk.Labelframe(main_frame, text="📊 ESTADO EN TIEMPO REAL", padding=15)
+        estado_frame.pack(fill=X, pady=(0, 15))
         
-        self.lbl_contador = tk.Label(estado_frame, text="Ocupadas: 0/0", 
-                                    font=("Arial", 16, "bold"))
-        self.lbl_contador.pack(pady=10)
+        # Contador principal
+        contador_frame = ttk.Frame(estado_frame)
+        contador_frame.pack(fill=X, pady=(0, 15))
         
-        # Frame de listas
-        listas_frame = tk.Frame(main_frame)
-        listas_frame.pack(fill=tk.BOTH, expand=True)
+        self.lbl_contador = ttk.Label(contador_frame, text="Ocupadas: 0/0", 
+                                     font=("Arial", 16, "bold"))
+        self.lbl_contador.pack(side=LEFT, padx=10)
+        
+        # Porcentaje ocupación
+        self.lbl_porcentaje = ttk.Label(contador_frame, text="0%", 
+                                       font=("Arial", 14, "bold"), foreground="green")
+        self.lbl_porcentaje.pack(side=RIGHT, padx=10)
+        
+        # Barra de progreso visual con Canvas
+        barra_frame = ttk.Frame(estado_frame)
+        barra_frame.pack(fill=X, pady=(0, 10))
+        
+        # Canvas para la barra personalizada
+        self.canvas_barra = tk.Canvas(barra_frame, height=30, 
+                                      bg="#2a2a2a", highlightthickness=0,
+                                      relief=FLAT, bd=0)
+        self.canvas_barra.pack(fill=X, padx=5, pady=5)
+        
+        # Variables para la barra
+        self.barra_ocupacion = 0
+        self.barra_capacidad = 100
+        self.dibujar_barra()
+        
+        # Texto debajo de la barra
+        self.lbl_estado_barra = ttk.Label(estado_frame, 
+                                         text="Disponibles: 100 - Ocupadas: 0", 
+                                         font=("Arial", 10))
+        self.lbl_estado_barra.pack(pady=(0, 5))
+        
+        # Frame de listas (3 columnas)
+        listas_frame = ttk.Frame(main_frame)
+        listas_frame.pack(fill=BOTH, expand=True)
         
         # Ocupadas
-        ocupadas_frame = tk.LabelFrame(listas_frame, text="FICHAS OCUPADAS", font=("Arial", 11, "bold"))
-        ocupadas_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 5))
+        ocupadas_frame = ttk.Labelframe(listas_frame, text="🔴 FICHAS OCUPADAS", padding=5)
+        ocupadas_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=(0, 5))
         
-        self.lista_ocupadas = tk.Listbox(ocupadas_frame, font=("Arial", 13))
-        scroll_ocupadas = tk.Scrollbar(ocupadas_frame)
+        self.lista_ocupadas = tk.Listbox(ocupadas_frame, font=("Arial", 11), height=15)
+        scroll_ocupadas = ttk.Scrollbar(ocupadas_frame, command=self.lista_ocupadas.yview)
         self.lista_ocupadas.config(yscrollcommand=scroll_ocupadas.set)
-        scroll_ocupadas.config(command=self.lista_ocupadas.yview)
-        self.lista_ocupadas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scroll_ocupadas.pack(side=tk.RIGHT, fill=tk.Y)
+        self.lista_ocupadas.pack(side=LEFT, fill=BOTH, expand=True)
+        scroll_ocupadas.pack(side=RIGHT, fill=Y)
         
         # Libres
-        libres_frame = tk.LabelFrame(listas_frame, text="FICHAS LIBRES", font=("Arial", 11, "bold"))
-        libres_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(5, 5))
+        libres_frame = ttk.Labelframe(listas_frame, text="🟢 FICHAS LIBRES", padding=5)
+        libres_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=(5, 5))
         
-        self.lista_libres = tk.Listbox(libres_frame, font=("Arial", 13))
-        scroll_libres = tk.Scrollbar(libres_frame)
+        self.lista_libres = tk.Listbox(libres_frame, font=("Arial", 11), height=15)
+        scroll_libres = ttk.Scrollbar(libres_frame, command=self.lista_libres.yview)
         self.lista_libres.config(yscrollcommand=scroll_libres.set)
-        scroll_libres.config(command=self.lista_libres.yview)
-        self.lista_libres.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scroll_libres.pack(side=tk.RIGHT, fill=tk.Y)
+        self.lista_libres.pack(side=LEFT, fill=BOTH, expand=True)
+        scroll_libres.pack(side=RIGHT, fill=Y)
         
         # Mensajes
-        mensajes_frame = tk.LabelFrame(listas_frame, text="MENSAJES", font=("Arial", 11, "bold"))
-        mensajes_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(5, 0))
+        mensajes_frame = ttk.Labelframe(listas_frame, text="💬 MENSAJES", padding=5)
+        mensajes_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=(5, 0))
         
-        self.text_mensajes = tk.Text(mensajes_frame, font=("Arial", 12), wrap=tk.WORD)
-        scroll_mensajes = tk.Scrollbar(mensajes_frame)
+        self.text_mensajes = tk.Text(mensajes_frame, font=("Arial", 10), wrap=WORD, height=15)
+        scroll_mensajes = ttk.Scrollbar(mensajes_frame, command=self.text_mensajes.yview)
         self.text_mensajes.config(yscrollcommand=scroll_mensajes.set)
-        scroll_mensajes.config(command=self.text_mensajes.yview)
-        self.text_mensajes.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scroll_mensajes.pack(side=tk.RIGHT, fill=tk.Y)
+        self.text_mensajes.pack(side=LEFT, fill=BOTH, expand=True)
+        scroll_mensajes.pack(side=RIGHT, fill=Y)
     
     def configurar_eventos(self):
         # Atajos de teclado
@@ -163,6 +267,85 @@ class VentanaOperacion:
         self.root.bind('<F3>', self.gestionar_abonos)
         self.root.bind('<Alt-a>', self.validar_dni)
         self.root.bind('<Alt-b>', self.buscar_persona)  # Nuevo atajo para buscar
+        self.root.bind('<Escape>', self.limpiar_campos)
+        
+        # Eventos de cambio
+        self.entry_ficha.bind('<KeyRelease>', self.on_ficha_change)
+        self.entry_dni.bind('<KeyRelease>', self.on_dni_change)
+    
+    def dibujar_barra(self):
+        """Dibuja la barra de ocupación con colores dinámicos"""
+        self.canvas_barra.delete("all")
+        
+        # Calcular porcentaje
+        if self.barra_capacidad > 0:
+            porcentaje = (self.barra_ocupacion / self.barra_capacidad) * 100
+        else:
+            porcentaje = 0
+        
+        # Obtener ancho del canvas
+        ancho_canvas = self.canvas_barra.winfo_width()
+        if ancho_canvas <= 1:
+            ancho_canvas = 400
+        
+        # Calcular ancho de la barra ocupada
+        ancho_ocupado = int((porcentaje / 100) * (ancho_canvas - 10))
+        
+        # Elegir color según ocupación
+        if porcentaje <= 50:
+            color = "#28a745"  # Verde
+        elif porcentaje <= 80:
+            color = "#ffc107"  # Amarillo/Naranja
+        else:
+            color = "#dc3545"  # Rojo
+        
+        # Fondo de la barra (gris)
+        self.canvas_barra.create_rectangle(5, 5, ancho_canvas - 5, 25,
+                                          fill="#444444", outline="#666666", width=1)
+        
+        # Barra ocupada
+        if ancho_ocupado > 0:
+            self.canvas_barra.create_rectangle(5, 5, 5 + ancho_ocupado, 25,
+                                              fill=color, outline="", width=0)
+        
+        # Porcentaje en el centro
+        self.canvas_barra.create_text(ancho_canvas // 2, 15,
+                                     text=f"{porcentaje:.0f}%",
+                                     font=("Arial", 10, "bold"),
+                                     fill="white")
+    
+    def actualizar_barra(self, ocupadas, capacidad):
+        """Actualiza la barra de ocupación"""
+        self.barra_ocupacion = ocupadas
+        self.barra_capacidad = capacidad
+        self.dibujar_barra()
+        
+        # Actualizar porcentaje
+        if capacidad > 0:
+            porcentaje = (ocupadas / capacidad) * 100
+            if porcentaje <= 50:
+                color_texto = "green"
+            elif porcentaje <= 80:
+                color_texto = "orange"
+            else:
+                color_texto = "red"
+        else:
+            porcentaje = 0
+            color_texto = "green"
+        
+        self.lbl_porcentaje.config(text=f"{porcentaje:.1f}%", foreground=color_texto)
+        
+        # Actualizar texto de disponibles
+        disponibles = capacidad - ocupadas
+        self.lbl_estado_barra.config(text=f"Disponibles: {disponibles} - Ocupadas: {ocupadas}")
+    
+    def configurar_eventos(self):
+        # Atajos de teclado
+        self.root.bind('<Return>', self.procesar_ingreso)
+        self.root.bind('<F2>', self.procesar_salida)
+        self.root.bind('<F3>', self.gestionar_abonos)
+        self.root.bind('<Alt-a>', self.validar_dni)
+        self.root.bind('<Alt-b>', self.buscar_persona)
         self.root.bind('<Escape>', self.limpiar_campos)
         
         # Eventos de cambio
@@ -453,6 +636,9 @@ class VentanaOperacion:
             
             # Actualizar contador
             self.lbl_contador.config(text=f"Ocupadas: {estado['ocupadas']}/{estado['capacidad']}")
+            
+            # Actualizar barra de ocupación
+            self.actualizar_barra(estado['ocupadas'], estado['capacidad'])
             
             # Actualizar listas
             self.lista_ocupadas.delete(0, tk.END)
