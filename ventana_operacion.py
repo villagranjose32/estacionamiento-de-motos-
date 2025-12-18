@@ -15,93 +15,6 @@ from domain.infra.services.egreso_service_nuevo import EgresoServiceNuevo
 from ventana_abonos import mostrar_gestion_abonos
 
 
-class BotonesRedondeados:
-    """Clase para crear botones con bordes redondeados"""
-    
-    def __init__(self, parent, texto, comando, estilo="success"):
-        self.parent = parent
-        self.texto = texto
-        self.comando = comando
-        self.estilo = estilo
-        self.pressed = False
-        
-        # Colores para cada estilo
-        self.colores = {
-            "success": {"bg": "#28a745", "hover": "#218838", "text": "white"},
-            "danger": {"bg": "#dc3545", "hover": "#c82333", "text": "white"},
-            "info": {"bg": "#17a2b8", "hover": "#138496", "text": "white"},
-            "warning": {"bg": "#ffc107", "hover": "#e0a800", "text": "black"},
-            "secondary": {"bg": "#6c757d", "hover": "#5a6268", "text": "white"}
-        }
-        
-        self.color_actual = self.colores.get(estilo, self.colores["success"])
-        
-        # Canvas para el botón
-        self.canvas = tk.Canvas(parent, width=160, height=40,
-                               bg="#1e1e1e", highlightthickness=0,
-                               relief=FLAT, bd=0)
-        self.canvas.pack(side=LEFT, padx=5)
-        
-        # Dibujar botón inicial
-        self.dibujar_boton(self.color_actual["bg"])
-        
-        # Eventos
-        self.canvas.bind("<Enter>", self.on_enter)
-        self.canvas.bind("<Leave>", self.on_leave)
-        self.canvas.bind("<Button-1>", self.on_click)
-        self.canvas.bind("<ButtonPress-1>", self.on_press)
-        self.canvas.bind("<ButtonRelease-1>", self.on_release)
-        self.canvas.config(cursor="hand2")
-    
-    def dibujar_boton(self, color_bg):
-        """Dibuja el botón con bordes redondeados"""
-        self.canvas.delete("all")
-        
-        # Dibujar rectángulo redondeado
-        self.canvas.create_oval(0, 0, 15, 15, fill=color_bg, outline="")  # Esquina superior izquierda
-        self.canvas.create_oval(145, 0, 160, 15, fill=color_bg, outline="")  # Esquina superior derecha
-        self.canvas.create_oval(0, 25, 15, 40, fill=color_bg, outline="")  # Esquina inferior izquierda
-        self.canvas.create_oval(145, 25, 160, 40, fill=color_bg, outline="")  # Esquina inferior derecha
-        
-        # Rectángulos del centro
-        self.canvas.create_rectangle(8, 0, 152, 40, fill=color_bg, outline="")
-        self.canvas.create_rectangle(0, 8, 160, 32, fill=color_bg, outline="")
-        
-        # Texto
-        self.canvas.create_text(80, 20, text=self.texto, 
-                               font=("Arial", 9, "bold"),
-                               fill=self.color_actual["text"], 
-                               justify="center")
-    
-    def on_enter(self, event):
-        """Efecto hover"""
-        if not self.pressed:
-            self.dibujar_boton(self.color_actual["hover"])
-    
-    def on_leave(self, event):
-        """Restaurar color normal"""
-        if not self.pressed:
-            self.dibujar_boton(self.color_actual["bg"])
-    
-    def on_press(self, event):
-        """Al presionar el botón"""
-        self.pressed = True
-        self.dibujar_boton(self.color_actual["hover"])
-    
-    def on_release(self, event):
-        """Al soltar el botón"""
-        self.pressed = False
-        self.dibujar_boton(self.color_actual["bg"])
-    
-    def on_click(self, event):
-        """Ejecutar comando"""
-        self.comando()
-    
-    def get_canvas(self):
-        """Retorna el canvas para empaquetarlo"""
-        return self.canvas
-
-
 class VentanaOperacion:
     def __init__(self, root):
         self.root = root
@@ -151,7 +64,7 @@ class VentanaOperacion:
         self.entry_ficha.grid(row=0, column=1, padx=10)
         
         # Estado Ficha
-        self.lbl_estado_ficha = ttk.Label(campos_frame, text="", font=("Arial", 11))
+        self.lbl_estado_ficha = tk.Label(campos_frame, text="", font=("Arial", 11), bg="#1e1e1e", fg="white")
         self.lbl_estado_ficha.grid(row=0, column=2, padx=5)
         
         # DNI
@@ -161,7 +74,7 @@ class VentanaOperacion:
         self.entry_dni.grid(row=0, column=4, padx=10)
         
         # Estado DNI
-        self.lbl_estado_dni = ttk.Label(campos_frame, text="Sin DNI", font=("Arial", 11))
+        self.lbl_estado_dni = tk.Label(campos_frame, text="Sin DNI", font=("Arial", 11), bg="#1e1e1e", fg="white")
         self.lbl_estado_dni.grid(row=0, column=5, padx=10)
         
         # Botón buscar DNI
@@ -173,20 +86,25 @@ class VentanaOperacion:
         botones_frame = ttk.Frame(op_frame)
         botones_frame.pack(fill=X, pady=(0, 10))
         
-        self.btn_ingreso = BotonesRedondeados(botones_frame, "✅ INGRESO (Enter)", 
-                                             self.procesar_ingreso, "success")
+        self.btn_ingreso = ttk.Button(botones_frame, text="✅ INGRESO (Enter)", 
+                                     command=self.procesar_ingreso, bootstyle="success-lg")
+        self.btn_ingreso.pack(side=LEFT, padx=5, ipady=8, ipadx=10)
         
-        self.btn_salida = BotonesRedondeados(botones_frame, "❌ SALIDA (F2)", 
-                                            self.procesar_salida, "danger")
+        self.btn_salida = ttk.Button(botones_frame, text="❌ SALIDA (F2)", 
+                                    command=self.procesar_salida, bootstyle="danger-lg")
+        self.btn_salida.pack(side=LEFT, padx=5, ipady=8, ipadx=10)
         
-        self.btn_validar = BotonesRedondeados(botones_frame, "✔ VALIDAR (Alt+A)", 
-                                             self.validar_dni, "info")
+        self.btn_validar = ttk.Button(botones_frame, text="✔ VALIDAR (Alt+A)", 
+                                     command=self.validar_dni, bootstyle="info-lg")
+        self.btn_validar.pack(side=LEFT, padx=5, ipady=8, ipadx=10)
         
-        self.btn_gestionar_abono = BotonesRedondeados(botones_frame, "💳 ABONOS (F3)", 
-                                                     self.gestionar_abonos, "warning")
+        self.btn_gestionar_abono = ttk.Button(botones_frame, text="💳 ABONOS (F3)", 
+                                             command=self.gestionar_abonos, bootstyle="warning-lg")
+        self.btn_gestionar_abono.pack(side=LEFT, padx=5, ipady=8, ipadx=10)
         
-        self.btn_limpiar = BotonesRedondeados(botones_frame, "🗑️ LIMPIAR (Esc)", 
-                                             self.limpiar_campos, "secondary")
+        self.btn_limpiar = ttk.Button(botones_frame, text="🗑️ LIMPIAR (Esc)", 
+                                     command=self.limpiar_campos, bootstyle="secondary")
+        self.btn_limpiar.pack(side=LEFT, padx=5, ipady=8, ipadx=10)
         
         # Frame de estado
         estado_frame = ttk.Labelframe(main_frame, text="📊 ESTADO EN TIEMPO REAL", padding=15)
@@ -201,8 +119,8 @@ class VentanaOperacion:
         self.lbl_contador.pack(side=LEFT, padx=10)
         
         # Porcentaje ocupación
-        self.lbl_porcentaje = ttk.Label(contador_frame, text="0%", 
-                                       font=("Arial", 14, "bold"), foreground="green")
+        self.lbl_porcentaje = tk.Label(contador_frame, text="0%", 
+                                       font=("Arial", 14, "bold"), fg="green", bg="#1e1e1e")
         self.lbl_porcentaje.pack(side=RIGHT, padx=10)
         
         # Barra de progreso visual con Canvas
@@ -221,9 +139,9 @@ class VentanaOperacion:
         self.dibujar_barra()
         
         # Texto debajo de la barra
-        self.lbl_estado_barra = ttk.Label(estado_frame, 
+        self.lbl_estado_barra = tk.Label(estado_frame, 
                                          text="Disponibles: 100 - Ocupadas: 0", 
-                                         font=("Arial", 10))
+                                         font=("Arial", 10), bg="#1e1e1e", fg="white")
         self.lbl_estado_barra.pack(pady=(0, 5))
         
         # Frame de listas (3 columnas)
@@ -371,7 +289,7 @@ class VentanaOperacion:
             # Verificar rango válido
             if ficha < 1 or ficha > config.capacidad:
                 self.entry_ficha.config(bg='#ffcccc')
-                self.lbl_estado_ficha.config(text=f"⚠️ Fuera de rango (1-{config.capacidad})", fg='red')
+                self.lbl_estado_ficha.config(text=f"⚠️ Fuera de rango (1-{config.capacidad})", foreground='red')
                 return
             
             # Verificar estado actual de la ficha (ocupada/disponible)
@@ -379,7 +297,7 @@ class VentanaOperacion:
             if movimiento:
                 # Ficha ocupada
                 self.entry_ficha.config(bg='white')
-                self.lbl_estado_ficha.config(text="✅ Ocupada", fg='green')
+                self.lbl_estado_ficha.config(text="✅ Ocupada", foreground='green')
                 
                 # Mostrar detalles del ingreso
                 try:
@@ -388,27 +306,27 @@ class VentanaOperacion:
                     if dni:
                         persona = self.ingreso_service.personas_repo.buscar_por_dni(dni)
                         nombre_persona = f"{persona.nombre} {persona.apellido}" if persona else "Desconocido"
-                        self.lbl_estado_ficha.config(text=f"✅ Ocupada - {nombre_persona}", fg='green')
+                        self.lbl_estado_ficha.config(text=f"✅ Ocupada - {nombre_persona}", foreground='green')
                 except:
                     pass
             else:
                 # Ficha libre
                 self.entry_ficha.config(bg='white')
-                self.lbl_estado_ficha.config(text="⚠️ Disponible", fg='orange')
+                self.lbl_estado_ficha.config(text="⚠️ Disponible", foreground='orange')
         else:
             self.entry_ficha.config(bg='#ffcccc')
-            self.lbl_estado_ficha.config(text="⚠️ Número inválido", fg='red')
+            self.lbl_estado_ficha.config(text="⚠️ Número inválido", foreground='red')
     
     def on_dni_change(self, event):
         dni = self.dni_var.get().strip()
         if not dni:
-            self.lbl_estado_dni.config(text="Sin DNI", fg='black')
+            self.lbl_estado_dni.config(text="Sin DNI", foreground='black')
             return
         
         try:
             es_valido, mensaje, abono, persona = self.ingreso_service.validar_dni(dni)
             if not es_valido:
-                self.lbl_estado_dni.config(text="❌ DNI no registrado - F3 para gestionar", fg='red')
+                self.lbl_estado_dni.config(text="❌ DNI no registrado - F3 para gestionar", foreground='red')
             elif abono:
                 estado = abono.estado()
                 if estado.value == 'vigente':

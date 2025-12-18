@@ -71,6 +71,7 @@ if error_code != 0:
 try:
     from ventana_operacion import VentanaOperacion
     from ventana_configuracion import ConfiguracionWindow
+    from ventana_editar_fichas import mostrar_gestion_fichas
 except ImportError as e:
     sys.exit(mostrar_error(
         "Error al importar módulos",
@@ -236,25 +237,22 @@ def modificar_capacidad_fichas(root):
                 messagebox.showerror("Error", "La capacidad debe estar entre 1 y 1000")
                 return
             
-            # Modificar la capacidad en el archivo de configuración
-            from domain.infra.paths import SedePaths
-            paths = SedePaths()
-            config_file = os.path.join(paths.root, 'config.txt')
-            
-            # Leer el archivo actual
+            # Modificar la capacidad usando ConfigRepo
             try:
-                with open(config_file, 'r') as f:
-                    lineas = f.readlines()
+                from domain.infra.paths import SedePaths
+                from domain.infra.config_repo import ConfigRepo
                 
-                # Modificar la capacidad (está en la primera línea, segundo campo)
-                if lineas:
-                    campos = lineas[0].strip().split(';')
-                    campos[1] = str(nueva_capacidad)
-                    lineas[0] = ';'.join(campos) + '\n'
+                paths = SedePaths()
+                repo = ConfigRepo(paths)
+                
+                # Cargar configuración actual
+                config = repo.load_or_create_defaults()
+                
+                # Actualizar capacidad
+                config.capacidad = nueva_capacidad
                 
                 # Guardar cambios
-                with open(config_file, 'w') as f:
-                    f.writelines(lineas)
+                repo.save(config)
                 
                 messagebox.showinfo("Éxito", 
                                   f"✅ Capacidad actualizada a {nueva_capacidad} fichas.\n"
@@ -296,6 +294,9 @@ def main():
         sistema_menu = tk.Menu(menu_bar, tearoff=0)
         menu_bar.add_cascade(label="Sistema", menu=sistema_menu)
         
+        sistema_menu.add_command(label="📋 Editar Fichas", 
+                               command=lambda: mostrar_gestion_fichas(root))
+        sistema_menu.add_separator()
         sistema_menu.add_command(label="🎨 Seleccionar Tema", 
                                command=lambda: mostrar_selector_temas(root))
         sistema_menu.add_command(label="🎫 Modificar Capacidad de Fichas", 
