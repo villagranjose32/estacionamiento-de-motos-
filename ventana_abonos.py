@@ -50,8 +50,8 @@ class VentanaGestionAbonos:
         main_frame.pack(fill=tk.BOTH, expand=True)
         
         # Título
-        titulo = tk.Label(main_frame, text="GESTIÓN DE ABONOS", 
-                         font=("Arial", 16, "bold"), bg='white')
+        titulo = tk.Label(main_frame, text="GESTIÓN DE ABONOS",
+                         font=("Segoe UI", 16, "bold"), bg='white')
         titulo.pack(pady=(0, 20))
         
         # Frame de búsqueda
@@ -70,16 +70,16 @@ class VentanaGestionAbonos:
         self.actualizar_estado()
     
     def crear_frame_busqueda(self, parent):
-        busqueda_frame = tk.LabelFrame(parent, text="BUSCAR PERSONA", font=("Arial", 12, "bold"))
+        busqueda_frame = tk.LabelFrame(parent, text="BUSCAR PERSONA", font=("Segoe UI", 12, "bold"))
         busqueda_frame.pack(fill=tk.X, pady=(0, 15))
         
         inner_frame = tk.Frame(busqueda_frame)
         inner_frame.pack(pady=10)
         
-        tk.Label(inner_frame, text="DNI:", font=("Arial", 12, "bold")).grid(row=0, column=0, padx=5)
+        tk.Label(inner_frame, text="DNI:", font=("Segoe UI", 12, "bold")).grid(row=0, column=0, padx=5)
         
         self.entry_dni = tk.Entry(inner_frame, textvariable=self.dni_var, 
-                                 font=("Arial", 12), width=15)
+                                 font=("Segoe UI", 12), width=15)
         self.entry_dni.grid(row=0, column=1, padx=10)
         self.entry_dni.bind('<KeyRelease>', self.on_dni_change)
         
@@ -94,87 +94,95 @@ class VentanaGestionAbonos:
         
         # Estado de búsqueda
         self.lbl_estado_busqueda = tk.Label(inner_frame, text="Ingrese DNI para buscar", 
-                                           font=("Arial", 10))
+                                           font=("Segoe UI", 10))
         self.lbl_estado_busqueda.grid(row=1, column=0, columnspan=3, pady=5)
     
     def crear_frame_persona(self, parent):
-        self.persona_frame = tk.LabelFrame(parent, text="DATOS PERSONALES", font=("Arial", 12, "bold"))
+        self.persona_frame = tk.LabelFrame(parent, text="DATOS PERSONALES", font=("Segoe UI", 12, "bold"))
         self.persona_frame.pack(fill=tk.X, pady=(0, 15))
         
         inner_frame = tk.Frame(self.persona_frame)
         inner_frame.pack(pady=10)
         
         # Nombre
-        tk.Label(inner_frame, text="Nombre:*", font=("Arial", 11)).grid(row=0, column=0, sticky=tk.W, padx=5)
+        tk.Label(inner_frame, text="Nombre:*", font=("Segoe UI", 11)).grid(row=0, column=0, sticky=tk.W, padx=5)
         self.entry_nombre = tk.Entry(inner_frame, textvariable=self.nombre_var, 
                                     font=("Arial", 11), width=25)
         self.entry_nombre.grid(row=0, column=1, padx=10, pady=2)
         self.entry_nombre.bind('<KeyRelease>', lambda e: self.actualizar_estado())
         
         # Apellido
-        tk.Label(inner_frame, text="Apellido:*", font=("Arial", 11)).grid(row=1, column=0, sticky=tk.W, padx=5)
+        tk.Label(inner_frame, text="Apellido:*", font=("Segoe UI", 11)).grid(row=1, column=0, sticky=tk.W, padx=5)
         self.entry_apellido = tk.Entry(inner_frame, textvariable=self.apellido_var, 
                                       font=("Arial", 11), width=25)
         self.entry_apellido.grid(row=1, column=1, padx=10, pady=2)
         self.entry_apellido.bind('<KeyRelease>', lambda e: self.actualizar_estado())
         
         # Teléfono
-        tk.Label(inner_frame, text="Teléfono:", font=("Arial", 11)).grid(row=2, column=0, sticky=tk.W, padx=5)
+        tk.Label(inner_frame, text="Teléfono:", font=("Segoe UI", 11)).grid(row=2, column=0, sticky=tk.W, padx=5)
         self.entry_telefono = tk.Entry(inner_frame, textvariable=self.telefono_var, 
                                       font=("Arial", 11), width=25)
         self.entry_telefono.grid(row=2, column=1, padx=10, pady=2)
         
         # Email
-        tk.Label(inner_frame, text="Email:", font=("Arial", 11)).grid(row=3, column=0, sticky=tk.W, padx=5)
+        tk.Label(inner_frame, text="Email:", font=("Segoe UI", 11)).grid(row=3, column=0, sticky=tk.W, padx=5)
         self.entry_email = tk.Entry(inner_frame, textvariable=self.email_var, 
                                    font=("Arial", 11), width=25)
         self.entry_email.grid(row=3, column=1, padx=10, pady=2)
         
         # Estado de la persona
-        self.lbl_estado_persona = tk.Label(inner_frame, text="", font=("Arial", 10, "bold"))
+        self.lbl_estado_persona = tk.Label(inner_frame, text="", font=("Segoe UI", 10, "bold"))
         self.lbl_estado_persona.grid(row=4, column=0, columnspan=2, pady=10)
     
     def crear_frame_abono(self, parent):
-        self.abono_frame = tk.LabelFrame(parent, text="CREAR/RENOVAR ABONO", font=("Arial", 12, "bold"))
+        self.abono_frame = tk.LabelFrame(parent, text="CREAR/RENOVAR ABONO", font=("Segoe UI", 12, "bold"))
         self.abono_frame.pack(fill=tk.X, pady=(0, 15))
         
         inner_frame = tk.Frame(self.abono_frame)
         inner_frame.pack(pady=10)
         
         # Duración en meses
-        tk.Label(inner_frame, text="Duración (meses):", font=("Arial", 11)).grid(row=0, column=0, sticky=tk.W, padx=5)
+        tk.Label(inner_frame, text="Duración (meses):", font=("Segoe UI", 11)).grid(row=0, column=0, sticky=tk.W, padx=5)
         self.combo_meses = ttk.Combobox(inner_frame, textvariable=self.meses_var, 
                                        values=["1", "2", "3", "6", "12"], width=10)
         self.combo_meses.grid(row=0, column=1, padx=10, pady=2)
         self.combo_meses.bind('<<ComboboxSelected>>', self.calcular_fechas)
         
         # Precio
-        tk.Label(inner_frame, text="Precio:", font=("Arial", 11)).grid(row=1, column=0, sticky=tk.W, padx=5)
+        tk.Label(inner_frame, text="Precio:", font=("Segoe UI", 11)).grid(row=1, column=0, sticky=tk.W, padx=5)
         self.entry_precio = tk.Entry(inner_frame, textvariable=self.precio_var, 
-                                    font=("Arial", 11), width=15)
+                                    font=("Segoe UI", 11), width=15)
         self.entry_precio.grid(row=1, column=1, padx=10, pady=2)
         self.entry_precio.bind('<KeyRelease>', self.calcular_fechas)
         
         # Fechas calculadas
-        self.lbl_fechas = tk.Label(inner_frame, text="", font=("Arial", 10))
+        self.lbl_fechas = tk.Label(inner_frame, text="", font=("Segoe UI", 10))
         self.lbl_fechas.grid(row=2, column=0, columnspan=2, pady=10)
         
         # Estado del abono actual
-        self.lbl_estado_abono = tk.Label(inner_frame, text="", font=("Arial", 10, "bold"))
+        self.lbl_estado_abono = tk.Label(inner_frame, text="", font=("Segoe UI", 10, "bold"))
         self.lbl_estado_abono.grid(row=3, column=0, columnspan=2, pady=5)
     
     def crear_frame_botones(self, parent):
         botones_frame = tk.Frame(parent, bg='white')
         botones_frame.pack(fill=tk.X, pady=20)
         
-        self.btn_guardar = tk.Button(botones_frame, text="GUARDAR Y CREAR ABONO", 
-                                    font=("Arial", 12, "bold"), bg='green', fg='white',
-                                    command=self.guardar_y_crear_abono, width=20)
-        self.btn_guardar.pack(side=tk.LEFT, padx=10)
+        # Frame verde para el botón Guardar
+        frame_guardar = tk.Frame(botones_frame, bg='#2ecc71', highlightthickness=2, highlightcolor='#27ae60')
+        frame_guardar.pack(side=tk.LEFT, padx=10, pady=5)
         
-        self.btn_cancelar = tk.Button(botones_frame, text="CANCELAR", 
-                                     font=("Arial", 12, "bold"), bg='gray', fg='white',
-                                     command=self.cancelar, width=15)
+        self.btn_guardar = tk.Button(frame_guardar, text="💾 GUARDAR", 
+                                    font=("Segoe UI", 12, "bold"), bg='#27ae60', fg='white',
+                                    command=self.guardar_y_crear_abono, width=20,
+                                    relief=tk.FLAT, bd=0, activebackground='#229954', activeforeground='white',
+                                    padx=10, pady=8)
+        self.btn_guardar.pack(padx=3, pady=3)
+        
+        self.btn_cancelar = tk.Button(botones_frame, text="❌ CANCELAR", 
+                                     font=("Segoe UI", 12, "bold"), bg='#95a5a6', fg='white',
+                                     command=self.cancelar, width=15,
+                                     relief=tk.RAISED, bd=2, activebackground='#7f8c8d',
+                                     padx=10, pady=8)
         self.btn_cancelar.pack(side=tk.RIGHT, padx=10)
     
     def on_dni_change(self, event):

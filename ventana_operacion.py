@@ -46,7 +46,7 @@ class VentanaOperacion:
         
         # Título con estilo
         titulo = ttk.Label(main_frame, text="🏍️ SISTEMA DE ESTACIONAMIENTO", 
-                          font=("Arial", 20, "bold"))
+                          font=("Segoe UI", 20, "bold"))
         titulo.pack(pady=(0, 20))
         
         # Frame de operación con LabelFrame
@@ -58,23 +58,23 @@ class VentanaOperacion:
         campos_frame.pack(fill=X, pady=(0, 15))
         
         # Nro de Ficha
-        ttk.Label(campos_frame, text="Nro. Ficha:", font=("Arial", 12, "bold")).grid(row=0, column=0, sticky=W, padx=5)
+        ttk.Label(campos_frame, text="Nro. Ficha:", font=("Segoe UI", 12, "bold")).grid(row=0, column=0, sticky=W, padx=5)
         self.entry_ficha = ttk.Entry(campos_frame, textvariable=self.ficha_var, 
-                                     font=("Arial", 16, "bold"), width=10, justify='center')
+                                     font=("Segoe UI", 16, "bold"), width=10, justify='center')
         self.entry_ficha.grid(row=0, column=1, padx=10)
         
         # Estado Ficha
-        self.lbl_estado_ficha = tk.Label(campos_frame, text="", font=("Arial", 11), bg="#1e1e1e", fg="white")
+        self.lbl_estado_ficha = tk.Label(campos_frame, text="", font=("Segoe UI", 11), bg="#1e1e1e", fg="white")
         self.lbl_estado_ficha.grid(row=0, column=2, padx=5)
         
         # DNI
-        ttk.Label(campos_frame, text="DNI:", font=("Arial", 12, "bold")).grid(row=0, column=3, padx=5)
+        ttk.Label(campos_frame, text="DNI:", font=("Segoe UI", 12, "bold")).grid(row=0, column=3, padx=5)
         self.entry_dni = ttk.Entry(campos_frame, textvariable=self.dni_var, 
-                                  font=("Arial", 14, "bold"), width=15, justify='center')
+                                  font=("Segoe UI", 14, "bold"), width=15, justify='center')
         self.entry_dni.grid(row=0, column=4, padx=10)
         
         # Estado DNI
-        self.lbl_estado_dni = tk.Label(campos_frame, text="Sin DNI", font=("Arial", 11), bg="#1e1e1e", fg="white")
+        self.lbl_estado_dni = tk.Label(campos_frame, text="Sin DNI", font=("Segoe UI", 11), bg="#1e1e1e", fg="white")
         self.lbl_estado_dni.grid(row=0, column=5, padx=10)
         
         # Botón buscar DNI
@@ -141,7 +141,7 @@ class VentanaOperacion:
         # Texto debajo de la barra
         self.lbl_estado_barra = tk.Label(estado_frame, 
                                          text="Disponibles: 100 - Ocupadas: 0", 
-                                         font=("Arial", 10), bg="#1e1e1e", fg="white")
+                                         font=("Segoe UI", 10), bg="#1e1e1e", fg="white")
         self.lbl_estado_barra.pack(pady=(0, 5))
         
         # Frame de listas (3 columnas)
@@ -152,7 +152,7 @@ class VentanaOperacion:
         ocupadas_frame = ttk.Labelframe(listas_frame, text="🔴 FICHAS OCUPADAS", padding=5)
         ocupadas_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=(0, 5))
         
-        self.lista_ocupadas = tk.Listbox(ocupadas_frame, font=("Arial", 11), height=15)
+        self.lista_ocupadas = tk.Listbox(ocupadas_frame, font=("Segoe UI", 11), height=15)
         scroll_ocupadas = ttk.Scrollbar(ocupadas_frame, command=self.lista_ocupadas.yview)
         self.lista_ocupadas.config(yscrollcommand=scroll_ocupadas.set)
         self.lista_ocupadas.pack(side=LEFT, fill=BOTH, expand=True)
@@ -162,7 +162,7 @@ class VentanaOperacion:
         libres_frame = ttk.Labelframe(listas_frame, text="🟢 FICHAS LIBRES", padding=5)
         libres_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=(5, 5))
         
-        self.lista_libres = tk.Listbox(libres_frame, font=("Arial", 11), height=15)
+        self.lista_libres = tk.Listbox(libres_frame, font=("Segoe UI", 11), height=15)
         scroll_libres = ttk.Scrollbar(libres_frame, command=self.lista_libres.yview)
         self.lista_libres.config(yscrollcommand=scroll_libres.set)
         self.lista_libres.pack(side=LEFT, fill=BOTH, expand=True)
@@ -172,7 +172,7 @@ class VentanaOperacion:
         mensajes_frame = ttk.Labelframe(listas_frame, text="💬 MENSAJES", padding=5)
         mensajes_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=(5, 0))
         
-        self.text_mensajes = tk.Text(mensajes_frame, font=("Arial", 10), wrap=WORD, height=15)
+        self.text_mensajes = tk.Text(mensajes_frame, font=("Segoe UI", 10), wrap=WORD, height=15)
         scroll_mensajes = ttk.Scrollbar(mensajes_frame, command=self.text_mensajes.yview)
         self.text_mensajes.config(yscrollcommand=scroll_mensajes.set)
         self.text_mensajes.pack(side=LEFT, fill=BOTH, expand=True)
@@ -229,7 +229,7 @@ class VentanaOperacion:
         # Porcentaje en el centro
         self.canvas_barra.create_text(ancho_canvas // 2, 15,
                                      text=f"{porcentaje:.0f}%",
-                                     font=("Arial", 10, "bold"),
+                                     font=("Segoe UI", 10, "bold"),
                                      fill="white")
     
     def actualizar_barra(self, ocupadas, capacidad):
@@ -401,19 +401,19 @@ class VentanaOperacion:
         ventana.transient(self.root)
         ventana.grab_set()
         
-        tk.Label(ventana, text="EGRESO PROCESADO", font=("Arial", 20, "bold")).pack(pady=20)
+        tk.Label(ventana, text="EGRESO PROCESADO", font=("Segoe UI", 20, "bold")).pack(pady=20)
         
-        tk.Label(ventana, text=f"Ficha: {detalle['ficha']}", font=("Arial", 18, "bold")).pack(pady=5)
-        tk.Label(ventana, text=f"Tiempo: {detalle['tiempo_str']}", font=("Arial", 14)).pack(pady=5)
+        tk.Label(ventana, text=f"Ficha: {detalle['ficha']}", font=("Segoe UI", 18, "bold")).pack(pady=5)
+        tk.Label(ventana, text=f"Tiempo: {detalle['tiempo_str']}", font=("Segoe UI", 14)).pack(pady=5)
         
         if detalle['es_abonado']:
-            tk.Label(ventana, text="ABONADO - SIN COSTO", font=("Arial", 20, "bold"), fg='green').pack(pady=15)
+            tk.Label(ventana, text="ABONADO - SIN COSTO", font=("Segoe UI", 20, "bold"), fg='green').pack(pady=15)
         else:
-            tk.Label(ventana, text=f"MONTO: ${detalle['monto']:.2f}", font=("Arial", 24, "bold"), fg='red').pack(pady=15)
-            tk.Label(ventana, text=f"Tarifa: {detalle['motivo']}", font=("Arial", 14)).pack(pady=5)
+            tk.Label(ventana, text=f"MONTO: ${detalle['monto']:.2f}", font=("Segoe UI", 24, "bold"), fg='red').pack(pady=15)
+            tk.Label(ventana, text=f"Tarifa: {detalle['motivo']}", font=("Segoe UI", 14)).pack(pady=5)
         
         if detalle.get('persona'):
-            tk.Label(ventana, text=f"Cliente: {detalle['persona']}", font=("Arial", 14)).pack(pady=5)
+            tk.Label(ventana, text=f"Cliente: {detalle['persona']}", font=("Segoe UI", 14)).pack(pady=5)
         
         tk.Button(ventana, text="CERRAR", command=ventana.destroy, 
                  font=("Arial", 16, "bold"), width=15).pack(pady=20)

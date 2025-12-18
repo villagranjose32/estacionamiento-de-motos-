@@ -40,7 +40,7 @@ class VentanaEditarFichas:
         
         # Título
         titulo = ttk.Label(main_frame, text="📋 EDITAR FICHAS", 
-                          font=("Arial", 18, "bold"))
+                          font=("Segoe UI", 18, "bold"))
         titulo.pack(pady=(0, 15))
         
         # Frame de búsqueda
@@ -272,7 +272,7 @@ class VentanaEditarFichas:
         
         # Título
         ttk.Label(ventana_edit, text=f"Editar Ficha #{nro_ficha}", 
-                 font=("Arial", 14, "bold")).pack(pady=10)
+                 font=("Segoe UI", 14, "bold")).pack(pady=10)
         
         # Frame de datos
         frame_datos = ttk.LabelFrame(ventana_edit, text="Datos de la Ficha", padding=15)
@@ -400,7 +400,7 @@ class VentanaEditarFichas:
         ventana_cierre.grab_set()
         
         ttk.Label(ventana_cierre, text=f"Cerrar Ficha #{ficha.get('ficha')}", 
-                 font=("Arial", 12, "bold")).pack(pady=10)
+                 font=("Segoe UI", 12, "bold")).pack(pady=10)
         
         frame = ttk.Frame(ventana_cierre, padding=15)
         frame.pack(fill=tk.BOTH, expand=True)
@@ -408,7 +408,7 @@ class VentanaEditarFichas:
         ttk.Label(frame, text="Monto a cobrar:").pack(anchor=tk.W, pady=5)
         var_monto = tk.StringVar()
         ttk.Entry(frame, textvariable=var_monto, width=20, 
-                 font=("Arial", 14)).pack(anchor=tk.W, pady=5)
+                 font=("Segoe UI", 14)).pack(anchor=tk.W, pady=5)
         
         def confirmar_cierre():
             try:

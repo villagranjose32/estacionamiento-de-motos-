@@ -135,61 +135,46 @@ def mostrar_selector_temas(root):
     """Muestra un diálogo para seleccionar un tema"""
     ventana = tk.Toplevel(root)
     ventana.title("Seleccionar Tema")
-    ventana.geometry("400x500")
+    ventana.geometry("400x200")
     ventana.transient(root)
     ventana.grab_set()
     
     # Título
-    titulo = ttk.Label(ventana, text="🎨 SELECCIONAR TEMA", font=("Arial", 14, "bold"))
+    titulo = ttk.Label(ventana, text="🎨 SELECCIONAR FONDO", font=("Segoe UI", 14, "bold"))
     titulo.pack(pady=15)
     
     # Descripción
-    desc = ttk.Label(ventana, text="Elige un tema para personalizar la interfaz:", 
-                    font=("Arial", 10))
-    desc.pack(pady=(0, 15))
+    desc = ttk.Label(ventana, text="Elige el color de fondo de la interfaz:", 
+                    font=("Segoe UI", 10))
+    desc.pack(pady=(0, 20))
     
-    # Frame con scrollbar para los botones
-    canvas_frame = ttk.Frame(ventana)
-    canvas_frame.pack(fill="both", expand=True, padx=10, pady=10)
-    
-    canvas = tk.Canvas(canvas_frame, highlightthickness=0)
-    scroll = ttk.Scrollbar(canvas_frame, orient="vertical", command=canvas.yview)
-    scrollable_frame = ttk.Frame(canvas)
-    
-    scrollable_frame.bind(
-        "<Configure>",
-        lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-    )
-    
-    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-    canvas.configure(yscrollcommand=scroll.set)
+    # Frame para los botones
+    frame_botones = ttk.Frame(ventana, padding=20)
+    frame_botones.pack(fill="both", expand=True)
     
     # Obtener tema actual
     tema_actual = cargar_tema_guardado()
     
-    # Crear botones para cada tema
-    def crear_boton_tema(tema):
-        btn_frame = ttk.Frame(scrollable_frame)
-        btn_frame.pack(fill="x", pady=5)
+    # Opciones: Blanco y Oscuro (superhero)
+    opciones = [
+        ("⚪ FONDO BLANCO", "litera"),
+        ("⚫ FONDO OSCURO", "superhero")
+    ]
+    
+    for etiqueta, tema in opciones:
+        btn_frame = ttk.Frame(frame_botones)
+        btn_frame.pack(fill="x", pady=10)
         
-        # Ícono y nombre del tema
-        label_tema = ttk.Label(btn_frame, text=f"🎨 {tema.upper()}", 
-                              font=("Arial", 11, "bold"))
+        label_tema = ttk.Label(btn_frame, text=etiqueta, 
+                              font=("Segoe UI", 12, "bold"))
         label_tema.pack(side="left", padx=10)
         
-        # Botón
         if tema == tema_actual:
-            btn = ttk.Button(btn_frame, text="✅ ACTUAL", state="disabled", width=20)
+            btn = ttk.Button(btn_frame, text="✅ ACTUAL", state="disabled", width=20, bootstyle="secondary")
         else:
-            btn = ttk.Button(btn_frame, text="Aplicar tema", 
-                           command=lambda: cambiar_tema(root, tema), width=20)
+            btn = ttk.Button(btn_frame, text="Aplicar", 
+                           command=lambda t=tema: cambiar_tema(root, t), width=20)
         btn.pack(side="right", padx=10)
-    
-    for tema in TEMAS_DISPONIBLES:
-        crear_boton_tema(tema)
-    
-    canvas.pack(side="left", fill="both", expand=True)
-    scroll.pack(side="right", fill="y")
     
     # Botón cerrar
     ttk.Button(ventana, text="Cerrar", command=ventana.destroy).pack(pady=10)
@@ -210,19 +195,19 @@ def modificar_capacidad_fichas(root):
     
     # Título
     ttk.Label(ventana, text="🎫 MODIFICAR CAPACIDAD DE FICHAS", 
-             font=("Arial", 12, "bold")).pack(pady=15)
+             font=("Segoe UI", 12, "bold")).pack(pady=15)
     
     # Frame para entrada
     frame_entrada = ttk.Frame(ventana, padding=10)
     frame_entrada.pack(fill="x", padx=20, pady=10)
     
     ttk.Label(frame_entrada, text="Nueva capacidad (1-1000):", 
-             font=("Arial", 11)).grid(row=0, column=0, sticky="w", pady=5)
+             font=("Segoe UI", 11)).grid(row=0, column=0, sticky="w", pady=5)
     
     var_capacidad = tk.StringVar()
     spinbox = ttk.Spinbox(frame_entrada, from_=1, to=1000, 
                          textvariable=var_capacidad, width=15, 
-                         font=("Arial", 12))
+                         font=("Segoe UI", 12))
     spinbox.grid(row=0, column=1, sticky="w", padx=10)
     spinbox.set(120)  # Valor por defecto
     
